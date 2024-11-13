@@ -52,10 +52,15 @@ def folder_synchronizer(source_folder, replica_folder):
                 shutil.rmtree(replica_sub_folder)
 
 
-source_folder="C:/xampp/htdocs/Source"
-replica_folder="C:/xampp/htdocs/Replica"
+
+
+#source_folder="C:/xampp/htdocs/Source"
+source_folder=input("Enter the Source folder path: ")
+replica_folder=input("Enter the Replica folder path: ")
+sync_timer=int(input("Timer for synchronizer in seconds: "))
+#replica_folder="C:/xampp/htdocs/Replica"
 
 while True:
     folder_synchronizer(source_folder, replica_folder)
-    print("Synchronization complete. Waiting for 10 seconds...")
-    time.sleep(10)
+    print(f"Synchronization complete. Waiting for {sync_timer} seconds...")
+    time.sleep(sync_timer)
