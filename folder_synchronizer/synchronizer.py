@@ -1,16 +1,25 @@
 import os
 import shutil
 import time
+from datetime import datetime
 
-def folder_synchronizer(source_folder, replica_folder):
-    # Folder verifications
-    if not os.path.exists(source_folder):
-        print(f"The source folder does not exist.\nPath: '{source_folder}'")
-        return
-    if not os.path.exists(replica_folder):
-        print(f"The replica folder does not exist.\nPath: '{replica_folder}'")
-        return
-    
+
+def log_entries(message):
+    with open(log_file, "a") as log_file:
+        timestamp=datetime.now().strftime("%H:%M:%S %D-%m-%Y")
+        log_file.write(f"[{timestamp}] {message}\n")
+
+
+def check_for_valid_folder(message):
+    while True:
+        folder_path=input(message)
+        if os.path.exists(folder_path):
+            return folder_path
+        else:
+            print("Please submit a valid folder path.")
+
+
+def folder_synchronizer(source_folder, replica_folder, log_file_path):
     #Synchronize the files from source to the replica
     for root, dirs, files in os.walk(source_folder):
         #Create the path in the replica folder using the relative path from the source folder
@@ -52,15 +61,21 @@ def folder_synchronizer(source_folder, replica_folder):
                 shutil.rmtree(replica_sub_folder)
 
 
+source_folder=check_for_valid_folder("Enter the Source folder path: ")
+replica_folder=check_for_valid_folder("Enter the Replica folder path: ")
+log_file_path=check_for_valid_folder("Enter the path for the log file: ")
+refresh_timer=int(input("Refresh timer in seconds: "))
 
 
-#source_folder="C:/xampp/htdocs/Source"
-source_folder=input("Enter the Source folder path: ")
-replica_folder=input("Enter the Replica folder path: ")
-sync_timer=int(input("Timer for synchronizer in seconds: "))
+
+
 #replica_folder="C:/xampp/htdocs/Replica"
+#log_file_path="C:/xampp/htdocs/Logs"
+#source_folder="C:/xampp/htdocs/Source"
+
+
 
 while True:
-    folder_synchronizer(source_folder, replica_folder)
-    print(f"Synchronization complete. Waiting for {sync_timer} seconds...")
-    time.sleep(sync_timer)
+    folder_synchronizer(source_folder, replica_folder, log_file_path)
+    print(f"Synchronization complete. Waiting for {refresh_timer} seconds...")
+    time.sleep(refresh_timer)
