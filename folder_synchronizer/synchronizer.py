@@ -23,7 +23,7 @@ def folder_synchronizer(source_folder, replica_folder):
 
         for file in files:
             source_file=os.path.join(root, file)
-            replica_file=os.path.join(replica_folder, file)
+            replica_file=os.path.join(replica_path, file)
 
             #If the file doesnt exist on the replica or the version on the source is recent, proceed to copy the file
             if (not os.path.exists(replica_file) or os.path.getmtime(source_file)>os.path.getmtime(replica_file)):
@@ -39,17 +39,17 @@ def folder_synchronizer(source_folder, replica_folder):
         for file in files:
             replica_file=os.path.join(root, file)
             source_file=os.path.join(source_path, file)
-            if not os.path.exists(source_path):
+            if not os.path.exists(source_file):
                 #Delete file on replica
                 os.remove(replica_file)
 
         #Verification if the folder exists on the source
         for dir in dirs:
-            replica_folder=os.path.join(root, dir)
-            source_folder=os.path.join(source_path, dir)
-            if not os.path.exists(source_folder):
+            replica_sub_folder=os.path.join(root, dir)
+            source_sub_folder=os.path.join(source_path, dir)
+            if not os.path.exists(source_sub_folder):
                 #Delete folder on replica
-                shutil.rmtree(replica_folder)
+                shutil.rmtree(replica_sub_folder)
 
 
 source_folder="C:/xampp/htdocs/Source"
@@ -59,4 +59,3 @@ while True:
     folder_synchronizer(source_folder, replica_folder)
     print("Synchronization complete. Waiting for 10 seconds...")
     time.sleep(10)
-
